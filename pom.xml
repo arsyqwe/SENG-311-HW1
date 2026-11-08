@@ -26,4 +26,103 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.18.2</version>
+                <dependencies>
+                    <dependency>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-junit5-plugin</artifactId>
+                    <version>1.2.2</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <targetClasses>
+                        <param>StudentOperations</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>StatisticsStudentTest</param>
+                    </targetTests>
+                    <includedGroups>
+                        <param>pit</param>
+                    </includedGroups>
+                    <mutators>
+                        <mutator>INLINE_CONSTS</mutator>
+                        <mutator>MATH</mutator>
+                        <mutator>NEGATE_CONDITIONALS</mutator>
+                        <mutator>NON_VOID_METHOD_CALLS</mutator>
+                        <mutator>REMOVE_CONDITIONALS</mutator>
+                        <mutator>PRIMITIVE_RETURNS</mutator>
+                    </mutators>
+                    <excludedMethods>
+                        <param>addStudent</param>
+                        <param>displayStudents</param>
+                        <param>searchByPrn</param>
+                        <param>searchByName</param>
+                        <param>searchByPosition</param>
+                        <param>updateStudent</param>
+                        <param>deleteStudent</param>
+                        <param>getTopStudent</param>
+                        <param>getStudentsAboveMarks</param>
+                        <param>sortByMarks</param>
+                        <param>lambda*</param>
+                        <param>validate*</param>
+                        <param>&lt;init&gt;</param>
+                    </excludedMethods>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Second mutant set: HW1 test 33 against updateStudent. Run with -Ppit-update -->
+        <profile>
+            <id>pit-update</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <configuration>
+                            <reportsDirectory>${project.build.directory}/pit-reports-update</reportsDirectory>
+                            <features>
+                                <feature>+EXPORT</feature>
+                            </features>
+                            <targetTests combine.self="override">
+                                <param>UpdateDeleteStudentTest</param>
+                            </targetTests>
+                            <mutators combine.self="override">
+                                <mutator>NEGATE_CONDITIONALS</mutator>
+                                <mutator>NON_VOID_METHOD_CALLS</mutator>
+                            </mutators>
+                            <excludedMethods combine.self="override">
+                                <param>addStudent</param>
+                                <param>displayStudents</param>
+                                <param>searchByPrn</param>
+                                <param>searchByName</param>
+                                <param>searchByPosition</param>
+                                <param>getAverageMarks</param>
+                                <param>deleteStudent</param>
+                                <param>getTopStudent</param>
+                                <param>getStudentsAboveMarks</param>
+                                <param>sortByMarks</param>
+                                <param>lambda*</param>
+                                <param>validate*</param>
+                                <param>&lt;init&gt;</param>
+                            </excludedMethods>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

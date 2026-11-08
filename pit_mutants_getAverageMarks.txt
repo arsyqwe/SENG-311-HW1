@@ -1,0 +1,199 @@
+PIT mutants of StudentOperations.getAverageMarks
+Test: StatisticsStudentTest.getAverageMarks_threeStudents_returnsAverage (test 38)
+==============================================================================
+Decompiled with CFR 0.152 from the .class files PIT exports (+EXPORT feature).
+PIT changes bytecode, so this is the mutated code rebuilt as Java, and its style
+can differ slightly from the real source. The test does not change: PIT runs
+the same test against each mutant below.
+Each entry shows the changed line(s), then the whole mutated method.
+
+ORIGINAL (decompiled the same way, for comparison)
+------------------------------------------------------------------------------
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (this.students.isEmpty()) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum += student.getMarks();
+    }
+    return sum / (double)this.students.size();
+}
+
+MUTANT 0  |  line 143  |  NegateConditionalsMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: negated conditional
+  original: if (this.students.isEmpty()) {
+  mutant:   if (!this.students.isEmpty()) {
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (!this.students.isEmpty()) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum += student.getMarks();
+    }
+    return sum / (double)this.students.size();
+}
+
+MUTANT 1  |  line 143  |  NonVoidMethodCallMutator  |  SURVIVED
+------------------------------------------------------------------------------
+What PIT did: removed call to java/util/ArrayList::isEmpty
+  original: if (this.students.isEmpty()) {
+  mutant:   if (false) {
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (false) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum += student.getMarks();
+    }
+    return sum / (double)this.students.size();
+}
+
+MUTANT 2  |  line 143  |  RemoveConditionalMutator_EQUAL_ELSE  |  SURVIVED
+------------------------------------------------------------------------------
+What PIT did: removed conditional - replaced equality check with false
+  original: if (this.students.isEmpty()) {
+  original: throw new StudentExceptions.EmptyStudentListException();
+  mutant:   this.students.isEmpty();
+  in plain Java: if (false) throw ...;  // isEmpty() still runs but its result is ignored, so the check never fires (same behaviour as mutant 1)
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    this.students.isEmpty();
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum += student.getMarks();
+    }
+    return sum / (double)this.students.size();
+}
+
+MUTANT 3  |  line 143  |  RemoveConditionalMutator_EQUAL_IF  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed conditional - replaced equality check with true
+  original: if (this.students.isEmpty()) {
+  original: throw new StudentExceptions.EmptyStudentListException();
+  original: }
+  original: double sum = 0.0;
+  original: for (Student student : this.students) {
+  original: sum += student.getMarks();
+  original: }
+  original: return sum / (double)this.students.size();
+  mutant:   this.students.isEmpty();
+  mutant:   throw new StudentExceptions.EmptyStudentListException();
+  in plain Java: if (true) throw ...;  // the method always throws; CFR drops the code after it because it can never run
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    this.students.isEmpty();
+    throw new StudentExceptions.EmptyStudentListException();
+}
+
+MUTANT 4  |  line 147  |  InlineConstantMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: Substituted 0.0 with 1.0
+  original: double sum = 0.0;
+  mutant:   double sum = 1.0;
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (this.students.isEmpty()) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 1.0;
+    for (Student student : this.students) {
+        sum += student.getMarks();
+    }
+    return sum / (double)this.students.size();
+}
+
+MUTANT 5  |  line 149  |  MathMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: Replaced double addition with subtraction
+  original: sum += student.getMarks();
+  mutant:   sum -= student.getMarks();
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (this.students.isEmpty()) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum -= student.getMarks();
+    }
+    return sum / (double)this.students.size();
+}
+
+MUTANT 6  |  line 149  |  NonVoidMethodCallMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed call to Student::getMarks
+  original: sum += student.getMarks();
+  mutant:   sum += 0.0;
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (this.students.isEmpty()) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum += 0.0;
+    }
+    return sum / (double)this.students.size();
+}
+
+MUTANT 7  |  line 151  |  MathMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: Replaced double division with multiplication
+  original: return sum / (double)this.students.size();
+  mutant:   return sum * (double)this.students.size();
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (this.students.isEmpty()) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum += student.getMarks();
+    }
+    return sum * (double)this.students.size();
+}
+
+MUTANT 8  |  line 151  |  PrimitiveReturnsMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: replaced double return with 0.0d for StudentOperations::getAverageMarks
+  original: return sum / (double)this.students.size();
+  mutant:   double cfr_ignored_0 = sum / (double)this.students.size();
+  mutant:   return 0.0;
+  in plain Java: return 0.0;  // cfr_ignored_0 is just the real average, calculated and thrown away
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (this.students.isEmpty()) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum += student.getMarks();
+    }
+    double cfr_ignored_0 = sum / (double)this.students.size();
+    return 0.0;
+}
+
+MUTANT 9  |  line 151  |  NonVoidMethodCallMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed call to java/util/ArrayList::size
+  original: return sum / (double)this.students.size();
+  mutant:   return sum / 0.0;
+  in plain Java: return sum / 0.0;  // size() becomes 0, so the result is Infinity
+
+public double getAverageMarks() throws StudentExceptions.EmptyStudentListException {
+    if (this.students.isEmpty()) {
+        throw new StudentExceptions.EmptyStudentListException();
+    }
+    double sum = 0.0;
+    for (Student student : this.students) {
+        sum += student.getMarks();
+    }
+    return sum / 0.0;
+}
+

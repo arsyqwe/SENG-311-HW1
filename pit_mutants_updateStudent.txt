@@ -1,0 +1,298 @@
+PIT mutants of StudentOperations.updateStudent
+Test: UpdateDeleteStudentTest.updateStudent_existingPrn_replacesStudent (test 33)
+==============================================================================
+Decompiled with CFR 0.152 from the .class files PIT exports (+EXPORT feature).
+PIT changes bytecode, so this is the mutated code rebuilt as Java, and its style
+can differ slightly from the real source. The test does not change: PIT runs
+the same test against each mutant below.
+Each entry shows the changed line(s), then the whole mutated method.
+
+ORIGINAL (decompiled the same way, for comparison)
+------------------------------------------------------------------------------
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        if (this.students.get(i).getPrn().equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 0  |  line 112  |  NonVoidMethodCallMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed call to Student::getPrn
+  original: this.validatePRN(updatedStudent.getPrn());
+  mutant:   this.validatePRN(null);
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(null);
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        if (this.students.get(i).getPrn().equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 1  |  line 113  |  NonVoidMethodCallMutator  |  SURVIVED
+------------------------------------------------------------------------------
+What PIT did: removed call to Student::getMarks
+  original: this.validateMarks(updatedStudent.getMarks());
+  mutant:   this.validateMarks(0.0);
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(0.0);
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        if (this.students.get(i).getPrn().equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 2  |  line 115  |  NonVoidMethodCallMutator  |  NO_COVERAGE
+------------------------------------------------------------------------------
+What PIT did: removed call to java/lang/Exception::getMessage
+  original: throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+  mutant:   throw new StudentExceptions.InvalidUpdateDataException(null);
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(null);
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        if (this.students.get(i).getPrn().equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 3  |  line 118  |  NonVoidMethodCallMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed call to java/util/ArrayList::size
+  original: while (i < this.students.size()) {
+  mutant:   while (i < 0) {
+  in plain Java: while (i < 0)  // size() becomes 0, so the loop never runs
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < 0) {
+        if (this.students.get(i).getPrn().equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 4  |  line 118  |  NegateConditionalsMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: negated conditional
+  original: while (i < this.students.size()) {
+  mutant:   while (i >= this.students.size()) {
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i >= this.students.size()) {
+        if (this.students.get(i).getPrn().equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 5  |  line 119  |  NonVoidMethodCallMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed call to java/lang/String::equals
+  original: if (this.students.get(i).getPrn().equals(prn)) {
+  mutant:   this.students.get(i).getPrn();
+  mutant:   if (false) {
+  in plain Java: if (false)  // equals() becomes false, so no student ever matches
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        this.students.get(i).getPrn();
+        if (false) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 6  |  line 119  |  NonVoidMethodCallMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed call to java/util/ArrayList::get
+  original: if (this.students.get(i).getPrn().equals(prn)) {
+  mutant:   if (((Student)null).getPrn().equals(prn)) {
+  in plain Java: ((Student) null).getPrn()  // get() becomes null, so this crashes with a NullPointerException
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        if (((Student)null).getPrn().equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 7  |  line 119  |  NegateConditionalsMutator  |  SURVIVED
+------------------------------------------------------------------------------
+What PIT did: negated conditional
+  original: if (this.students.get(i).getPrn().equals(prn)) {
+  mutant:   if (!this.students.get(i).getPrn().equals(prn)) {
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        if (!this.students.get(i).getPrn().equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 8  |  line 119  |  NonVoidMethodCallMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed call to Student::getPrn
+  original: if (this.students.get(i).getPrn().equals(prn)) {
+  mutant:   this.students.get(i);
+  mutant:   if (((String)null).equals(prn)) {
+  in plain Java: ((String) null).equals(prn)  // getPrn() becomes null, so this crashes with a NullPointerException
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        this.students.get(i);
+        if (((String)null).equals(prn)) {
+            this.students.set(i, updatedStudent);
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+
+MUTANT 9  |  line 120  |  NonVoidMethodCallMutator  |  KILLED
+------------------------------------------------------------------------------
+What PIT did: removed call to java/util/ArrayList::set
+  original: this.students.set(i, updatedStudent);
+  in plain Java: the set() call is gone, so the method returns without replacing the student
+
+public void updateStudent(String prn, Student updatedStudent) throws StudentExceptions.StudentUpdateException, StudentExceptions.InvalidUpdateDataException {
+    try {
+        this.validatePRN(prn);
+        this.validatePRN(updatedStudent.getPrn());
+        this.validateMarks(updatedStudent.getMarks());
+    }
+    catch (StudentExceptions.InvalidMarksException | StudentExceptions.InvalidPRNException e) {
+        throw new StudentExceptions.InvalidUpdateDataException(e.getMessage());
+    }
+    int i = 0;
+    while (i < this.students.size()) {
+        if (this.students.get(i).getPrn().equals(prn)) {
+            return;
+        }
+        ++i;
+    }
+    throw new StudentExceptions.StudentUpdateException("Student with PRN " + prn + " not found");
+}
+

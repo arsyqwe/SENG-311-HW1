@@ -7,7 +7,8 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 @SelectClasses({
         StudentModelTest.class,
         AddStudentTest.class,
-        DisplayStudentsTest.class
+        DisplayStudentsTest.class,
+        StudentListIntegrityTest.class
 })
 public class ModelAndAddDisplaySuite {
 }
