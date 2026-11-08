@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -65,5 +66,20 @@ public class DisplayStudentsTest {
                 () -> assertTrue(output.contains("Position 0: " + s0)),
                 () -> assertTrue(output.contains("Position 1: " + s1)),
                 () -> assertTrue(output.contains("Position 2: " + s2)));
+    }
+
+    // 79
+    @Test
+    @DisplayName("A failed add prints no success message")
+    void addStudent_failed_printsNothing() throws Exception {
+        operations.addStudent(new Student("11111111111", "Ismail", "01.01.2006", 80.0));
+        outContent.reset();
+
+        assertAll("failed adds",
+                () -> assertThrows(StudentExceptions.DuplicatePRNException.class,
+                        () -> operations.addStudent(new Student("11111111111", "Eren", "01.01.2008", 85.0))),
+                () -> assertThrows(StudentExceptions.InvalidStudentDataException.class,
+                        () -> operations.addStudent(new Student("123", "Ahmet", "01.01.2005", 90.0))),
+                () -> assertEquals("", outContent.toString()));
     }
 }

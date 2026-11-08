@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -73,7 +76,7 @@ public class SearchStudentTest {
     void searchByName_exactName_returnsSameObject() throws Exception {
         Student found = operations.searchByName("Ismail");
 
-        assertSame(student1, found);//beforeEachde 3 tane öğrenci koyulduğu için patlamıyor.
+        assertSame(student1, found);
     }
 
     // 25
@@ -92,9 +95,9 @@ public class SearchStudentTest {
     void searchByName_nonExistingName_throwsExceptionAndMessage() {
         StudentExceptions.StudentNotFoundException exception = assertThrows(
                 StudentExceptions.StudentNotFoundException.class,
-                () -> operations.searchByName("Mahmut"));
+                () -> operations.searchByName("Non existing name"));
 
-        assertEquals("Student not found: Name: Mahmut", exception.getMessage());
+        assertEquals("Student not found: Name: Non existing name", exception.getMessage());
     }
 
     // 27
@@ -153,4 +156,86 @@ public class SearchStudentTest {
         assertThrows(StudentExceptions.StudentNotFoundException.class,
                 () -> emptyOperations.searchByPosition(0));
     }
+    
+    // 55
+    @Test
+    @DisplayName("A name made up of spaces is rejected when adding, just as it is when searching")
+    void searchByName_nameFullOfSpaces() {
+        Student s = new Student("12345678910", "    ","01.01.2002",77.7);
+
+        assertAll("blank name",
+            () -> assertThrows(StudentExceptions.InvalidStudentDataException.class,
+                () -> operations.addStudent(s)),
+            () -> assertThrows(StudentExceptions.InvalidSearchCriteriaException.class,
+                () -> operations.searchByName("    ")));
+    }
+    
+    // 56
+    @Test
+    @DisplayName("Two students with the same name return the first")
+    void searchByName_duplicate() throws Exception {
+        Student s = new Student("12345678910", "Ismail", "01.01.2006", 80.0);
+        operations.addStudent(s);
+        
+        assertSame(student1, operations.searchByName("Ismail"));
+    }
+    
+    // 57
+    @Test
+    @DisplayName("Search functioning while student with null name is in a list")
+    void searchByName_whileNullNameInList() throws Exception {
+        Student s = new Student("12345678910", null, "01.01.2002", 80.5);
+        Student sLast = new Student("99999999999", "Last", "01.01.2002", 9.5);
+        
+        operations.addStudent(s);
+        operations.addStudent(sLast);
+        
+        assertAll(
+            () -> assertSame(student1, operations.searchByName("Ismail")),
+            () -> assertSame(sLast, operations.searchByName("Last")),
+            () -> assertThrows(StudentExceptions.StudentNotFoundException.class, 
+                () -> operations.searchByName("G"))
+        );
+    }
+    
+    // 58
+    @Test
+    @DisplayName("Case-insensitive name matching with non-English letters")
+    void searchByName_nonEnglish() throws Exception {
+        Student s = new Student("12345678910", "Ayşe", "01.01.2002", 80.5);
+        operations.addStudent(s);
+        Student s1 = new Student("12345678911", "İsmail", "01.01.2002", 80.5);
+        operations.addStudent(s1);
+        Student s2 = new Student("12345678912", "Hakkı", "01.01.2002", 80.5);
+        operations.addStudent(s2);
+        
+        assertAll(
+            () -> assertSame(s, operations.searchByName("ayşe")),
+            () -> assertSame(s, operations.searchByName("AYŞE")),
+            () -> assertThrows(StudentExceptions.StudentNotFoundException.class,
+                () -> operations.searchByName("ayse")),
+            () -> assertSame(student1, operations.searchByName("Ismail")),
+            () -> assertSame(student1, operations.searchByName("ısmail")),
+            () -> assertSame(s1, operations.searchByName("İsmail")),
+            () -> assertSame(s1, operations.searchByName("ismail")),
+            () -> assertSame(s2, operations.searchByName("HAKKI")),
+            () -> assertThrows(StudentExceptions.StudentNotFoundException.class, 
+                () -> operations.searchByName("hakki")),
+            () -> assertThrows(StudentExceptions.StudentNotFoundException.class, 
+                () -> operations.searchByName("HAKKİ"))
+        );
+    }
+    
+    // 59 (parameterized)
+    @ParameterizedTest
+    @DisplayName("Searching by PRN with invalid format of length 11 throws invalid search criteria exception")
+    @ValueSource(strings = {"1234567890", "123456789012", "12345abc901", "12345 67890", "           ", "+1234567890", "١٢٣٤٥٦٧٨٩١٠"})
+    void searchByPrn_invalidFormat_throwsImproperSearchCriteria(String invalidPrn) {
+        StudentExceptions.InvalidSearchCriteriaException exception = assertThrows(
+                StudentExceptions.InvalidSearchCriteriaException.class,
+                () -> operations.searchByPrn(invalidPrn));
+                
+        assertTrue(exception.getMessage().startsWith("Invalid search criteria: Invalid PRN format"));
+    }
+    // FYI, "١٢٣٤٥٦٧٨٩١٠" is "12345678910" in Arabic numerals, and are in fact considered digits in 'Character.isDigit()', hence why it's here
 }

@@ -42,7 +42,7 @@ public class StudentOperations {
         // Check for duplicate PRN
         try {
             if (searchByPrn(student.getPrn()) != null) {
-                // BROKEN ON PURPOSE: throw new StudentExceptions.DuplicatePRNException(student.getPrn());
+                throw new StudentExceptions.DuplicatePRNException(student.getPrn());
             }
         } catch (StudentExceptions.InvalidSearchCriteriaException | StudentExceptions.StudentNotFoundException e) {
             // If StudentNotFoundException is caught, it means the PRN is not a duplicate, so we can proceed.
@@ -170,7 +170,7 @@ public class StudentOperations {
 
         ArrayList<Student> result = new ArrayList<>();
         for (Student student : students) {
-            if (student.getMarks() >= threshold) { 
+            if (student.getMarks() > threshold) {
                 result.add(student);
             }
         }
